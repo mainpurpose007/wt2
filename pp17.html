@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Registration Form</title>
+</head>
+<body onload="showAlert()">
+  <h1>Student Registration Form</h1>
+  <form>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name">
+    <br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email">
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password">
+    <br>
+    <input type="submit" value="Submit">
+  </form>
+
+  <script>
+    function showAlert() {
+      alert("Hello! Good Morning!");
+    }
+  </script>
+</body>
+</html>
+
+
+python
+
+import re
+from nltk.tokenize import sent_tokenize
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+# Text paragraph
+text = """
+So, keep working. Keep striving. Never give up. Fall down seven times, get up eight. 
+Ease is a greater threat to progress than hardship. Ease is a greater threat to progress than hardship. 
+So, keep moving, keep growing, keep learning. See you at work.
+"""
+
+# Preprocess the text to remove special characters and digits
+text = re.sub(r'\W', ' ', text)  # Remove special characters
+text = re.sub(r'\d+', '', text)   # Remove digits
+
+# Tokenize the text into sentences
+sentences = sent_tokenize(text)
+
+# Calculate cosine similarity between sentences
+vectorizer = CountVectorizer(stop_words='english')
+X = vectorizer.fit_transform(sentences)
+sentence_similarity = cosine_similarity(X, X)
+
+# Generate summary using extractive summarization
+summary_length = min(3, len(sentences))
+summary_indices = sorted(range(len(sentence_similarity.sum(axis=1))), key=lambda i: sentence_similarity.sum(axis=1)[i], reverse=True)[:summary_length]
+summary = ' '.join(sentences[i] for i in summary_indices)
+
+print("Original text:\n", text)
+print("\nSummary:\n", summary)
+

@@ -1,0 +1,61 @@
+<html>
+<body>
+<h1 id="ch">Welcome</h1>
+<button onclick="promptfunction()">Prompt</button> <br/> <br/>
+<button onclick="confirmfunction()">Confirm</button> <br/> <br/>
+<button onclick="alertfunction()">Alert</button> <br/> <br/>
+<script type="text/javascript">
+function promptfunction()
+{
+var temp = prompt('Exam are near, have you started preparing for it? Yes or No', 'No')
+if (temp === 'No')
+document.getElementById('ch').innerHTML ='Start preparing for the exam'
+else
+document.getElementById('ch').innerHTML = 'Best of luck'
+}
+function confirmfunction()
+{
+var temp = confirm('Exam are near, have you started preparing for it?')
+if (temp == false)
+document.getElementById('ch').innerHTML ='Start preparing for the exam'
+else
+document.getElementById('ch').innerHTML ='Best of luck'
+}
+function alertfunction()
+{
+alert('Exam are near, have you started preparing for it?')
+document.getElementById('ch').innerHTML ='Start preparing for the exam'
+}
+</script>
+</body>
+</html>
+
+
+import pandas as pd
+from mlxtend.frequent_patterns import apriori, association_rules
+
+# Read the dataset
+groceries_df = pd.read_csv('Groceries_dataset.csv')
+
+# Display dataset information
+print("Dataset Information:")
+print(groceries_df.info())
+
+# Preprocess the data
+groceries_df.dropna(inplace=True)
+
+# Convert categorical values into numeric format using one-hot encoding
+groceries_encoded = pd.get_dummies(groceries_df, drop_first=True)
+
+# Apply Apriori algorithm to generate frequent itemsets
+frequent_itemsets = apriori(groceries_encoded, min_support=0.01, use_colnames=True)
+
+# Generate association rules
+association_rules_df = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.5)
+
+# Display frequent itemsets and association rules
+print("\nFrequent Itemsets:")
+print(frequent_itemsets.head())
+
+print("\nAssociation Rules:")
+print(association_rules_df.head())

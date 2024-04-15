@@ -1,0 +1,89 @@
+setb1.html 
+<html> 
+<head> 
+<script type="text/javascript">  
+function display()
+{
+	n=f1.name1.value; 
+	if(window.XMLHttpRequest) 
+	xmlhttp=new XMLHttpRequest(); 
+	
+	xmlhttp.open("GET","setb11.php?name1="+n,true); 
+	xmlhttp.send(); 
+	xmlhttp.onreadystatechange=function()
+	{ 
+		if(xmlhttp.readyState==4 && xmlhttp.status==200)
+		{ 
+			document.getElementById('res').innerHTML = xmlhttp.responseText; 
+		} 
+	} 
+} 
+</script> 
+<body> 
+<form name="f1"> 
+ENTER EMPLOYEE NAME
+<input type="text" name="name1"/><br>
+<input type="button" value="submit" onclick="display()"/> 
+</form> 
+<div id='res'></div> 
+</body> 
+</html>
+
+ 
+setb1.php 
+
+<?php  
+$a=$_REQUEST['name1']; 
+$con=pg_connect("host=192.168.100.10 port=5432 dbname=tybcs4 user=tybcs4") or die("connection not establish");
+$result=pg_query("select * from employee1 where e_name='$a'"); 
+
+	echo "<table border=1>"; 
+	echo "<tr>"; 
+	echo "<th>Number</th>"; 
+	echo "<th>Name</th>"; 
+	echo "<th>Address</th>"; 
+	echo "<th>Salary</th>"; 
+	echo "</tr>"; 
+	while($row=pg_fetch_array($result))
+	{ 
+		echo "<tr>"; 
+		echo "<td>".$row['e_no']."</td>"; 
+		echo "<td>".$row['e_name']."</td>"; 
+		echo "<td>".$row['e_add']."</td>"; 
+		echo "<td>".$row['e_salary']."</td>"; 
+	} 
+	echo "</tr>"; 
+	echo "</table>"; 
+?>
+
+
+python
+
+
+import re
+from nltk.tokenize import sent_tokenize
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+# Text paragraph
+text = """Hello all, Welcome to Python Programming Academy. Python Programming Academy is a nice platform to learn new programming skills. It is difficult to get enrolled in this Academy."""
+
+# Preprocess the text to remove special characters and digits
+text = re.sub(r'\W', ' ', text)  # Remove special characters
+text = re.sub(r'\d+', '', text)   # Remove digits
+
+# Tokenize the text into sentences
+sentences = sent_tokenize(text)
+
+# Calculate cosine similarity between sentences
+vectorizer = CountVectorizer(stop_words='english')
+X = vectorizer.fit_transform(sentences)
+sentence_similarity = cosine_similarity(X, X)
+
+# Generate summary using extractive summarization
+summary_length = min(3, len(sentences))
+summary_indices = sorted(range(len(sentence_similarity.sum(axis=1))), key=lambda i: sentence_similarity.sum(axis=1)[i], reverse=True)[:summary_length]
+summary = ' '.join(sentences[i] for i in summary_indices)
+
+print("Original text:\n", text)
+print("\nSummary:\n", summary)

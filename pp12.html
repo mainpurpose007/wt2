@@ -1,0 +1,96 @@
+contact.dat
+1 Isha 65768798 98765432 Nashik
+2 Megha 65235689 87654329 Pune
+
+contact.html
+
+<html>
+<head>
+<script type="text/javascript" >
+function print()
+{
+var ob=false;
+ob=new XMLHttpRequest();
+ob.open("GET","contact.php?");//emailid="+eid);
+ob.send();
+ob.onreadystatechange=function()
+{
+if(ob.readyState==4 && ob.status==200)
+{
+document.getElementById("i").innerHTML=ob.responseText;
+}
+}
+}
+</script>
+</head>
+<body>
+<center>
+<h3>Display the contents of a contact.dat file </h3>
+<br><input type="button" value=Print onclick="print()" >
+<span id="i"></span>
+</center>
+</body>
+</html>
+
+
+contact.php
+
+<?php
+$fp = fopen('contact.dat','r');
+echo "<table border=1>";
+echo "<tr><th>Sr. No.</th><th>Name</th><th>Residence No.</th><th>Mob.
+no.</th><th>Address</th></tr>";
+while($row = fscanf($fp,"%s %s %s %s %s"))
+{
+echo "<tr>";
+foreach($row as $r)
+{
+echo "<td>$r</td>";
+}
+echo "</tr>";
+}
+echo "</table>";
+fclose($fp);
+?>
+
+
+python
+
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+# Creating synthetic data for heights and weights
+np.random.seed(0)
+num_samples = 1000
+
+# Generating random values for heights and weights
+heights = np.random.normal(170, 10, num_samples)
+weights = np.random.normal(70, 15, num_samples)
+
+# Generating random values for purchases based on heights and weights
+purchases = 50 + 0.4 * heights + 0.6 * weights + np.random.normal(0, 5, num_samples)
+
+# Creating DataFrame
+data = pd.DataFrame({'Height': heights, 'Weight': weights, 'Purchases': purchases})
+
+# Identifying independent and target variables
+X = data[['Height', 'Weight']]
+y = data['Purchases']
+
+# Splitting the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Building a linear regression model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Printing the training and testing sets
+print("Training set:")
+print(X_train)
+print(y_train)
+print("\nTesting set:")
+print(X_test)
+print(y_test)
+

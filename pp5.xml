@@ -1,0 +1,72 @@
+item.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<items>
+<item>
+<name>Pen</name>
+<rate>50</rate>
+<quantity>10</quantity>
+</item>
+<item>
+<name>Pencil</name>
+<rate>10</rate>
+<quantity>15</quantity>
+</item>
+<item>
+<name>Notebook</name>
+<rate>80</rate>
+<quantity>20</quantity>
+</item>
+<item>
+<name>Sack</name>
+<rate>300</rate>
+<quantity>25</quantity>
+</item>
+<item>
+<name>Chair</name>
+<rate>700</rate>
+<quantity>30</quantity>
+</item>
+</items>
+
+
+
+python
+
+import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# Load the iris dataset
+iris_data = load_iris()
+
+# Create a DataFrame from the dataset
+iris_df = pd.DataFrame(data=iris_data.data, columns=iris_data.feature_names)
+iris_df['Species'] = iris_data.target
+
+# Map numerical species to their respective names
+iris_df['Species'] = iris_df['Species'].map({0: 'setosa', 1: 'versicolor', 2: 'virginica'})
+
+# Display basic statistical details for each species
+for species in iris_df['Species'].unique():
+    print(f"\nStatistics for {species}:")
+    print(iris_df[iris_df['Species'] == species].describe())
+
+# Extract features and target
+X = iris_df.drop('Species', axis=1)
+y = iris_df['Species']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Build and train the logistic regression model
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+
+# Make predictions
+y_pred = model.predict(X_test)
+
+# Calculate accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print("\nAccuracy of the logistic regression model:", accuracy)

@@ -1,0 +1,64 @@
+<html>
+<head>
+</head>
+<body>
+<form name="Membership_login" onsubmit="validfunction()"
+method="post">
+<center>
+<h3>Membership form</h3>
+Username: <input type="text" name="user"></br></br>
+Password: <input type="password" name="pass"></br></br>
+<button type="submit" value="Login">LogIn</button>
+</center>
+</form>
+<script type="text/javascript">
+function validfunction()
+{
+var user = document.Membership_login.user.value
+var pass = document.Membership_login.pass.value
+if(user ==="rohit" && pass === "rohit123")
+alert("login successful")
+else if(user == null || pass=="")
+alert("Empty username or password field.")
+else
+alert("inavlid credentials.")
+}
+</script>
+</body>
+</html>
+
+
+import pandas as pd
+from mlxtend.frequent_patterns import apriori, association_rules
+
+# Create a transactions dataset
+transactions = [
+    ['milk', 'bread', 'eggs'],
+    ['bread', 'butter', 'jam'],
+    ['milk', 'bread', 'butter', 'jam'],
+    ['bread', 'eggs'],
+    ['milk', 'eggs']
+]
+
+# Convert the transactions into a DataFrame
+transactions_df = pd.DataFrame(transactions)
+
+# Display the transactions dataset
+print("Transactions Dataset:")
+print(transactions_df)
+
+# Convert categorical values into numeric format using one-hot encoding
+transactions_encoded = pd.get_dummies(transactions_df, prefix='', prefix_sep='')
+
+# Apply Apriori algorithm to generate frequent itemsets
+frequent_itemsets = apriori(transactions_encoded, min_support=0.2, use_colnames=True)
+
+# Generate association rules
+association_rules_df = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.5)
+
+# Display frequent itemsets and association rules
+print("\nFrequent Itemsets:")
+print(frequent_itemsets)
+
+print("\nAssociation Rules:")
+print(association_rules_df)

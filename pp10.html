@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insert Text Before and After Paragraph</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function(){
+    // Insert text before the paragraph
+    $("#addBefore").click(function(){
+        $("p").before("<b>Before Text: </b>");
+    });
+
+    // Insert text after the paragraph
+    $("#addAfter").click(function(){
+        $("p").after("<i>After Text.</i>");
+    });
+});
+</script>
+</head>
+<body>
+<h2>Insert Text Before and After Paragraph</h2>
+<p>This is a paragraph.</p>
+<button id="addBefore">Add Text Before</button>
+<button id="addAfter">Add Text After</button>
+</body>
+</html>
+
+python
+
+import pandas as pd
+from mlxtend.frequent_patterns import apriori, association_rules
+
+# Create the dataset
+data = {
+    'TID': [1, 2, 3, 4, 5],
+    'Items': [
+        ['eggs', 'milk', 'bread'],
+        ['eggs', 'apple'],
+        ['milk', 'bread'],
+        ['apple', 'milk'],
+        ['milk', 'apple', 'bread']
+    ]
+}
+
+# Convert to DataFrame
+df = pd.DataFrame(data)
+
+# Convert categorical values into numeric format using one-hot encoding
+df_encoded = pd.get_dummies(df['Items'].apply(pd.Series).stack()).sum(level=0)
+
+# Apply Apriori algorithm to generate frequent itemsets and association rules with different min_sup values
+min_sups = [0.2, 0.4, 0.6]
+for min_sup in min_sups:
+    print(f"\nMinimum Support: {min_sup}")
+    frequent_itemsets = apriori(df_encoded, min_support=min_sup, use_colnames=True)
+    print("Frequent Itemsets:")
+    print(frequent_itemsets)
+    
+    association_rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.5)
+    print("\nAssociation Rules:")
+    print(association_rules)

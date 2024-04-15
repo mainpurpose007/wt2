@@ -1,0 +1,85 @@
+
+movie.xml
+<movieinfo>
+<movie mno="101">
+<movietitle> abcd </movietitle>
+<actorname> deepika </actorname>
+<releaseyear> 2020 </releaseyear>
+</movie>
+<movie mno="102">
+<movietitle> xyz </movietitle>
+<actorname> alia </actorname>
+<releaseyear> 2018 </releaseyear>
+</movie>
+<movie mno="103">
+<movietitle> abc </movietitle>
+<actorname> kareena </actorname>
+<releaseyear> 2002 </releaseyear>
+</movie>
+<movie mno="104">
+<movietitle> jyh </movietitle>
+<actorname> priyanka </actorname>
+<releaseyear> 2008 </releaseyear>
+</movie>
+<movie mno="105">
+<movietitle> kgf </movietitle>
+<actorname> yash </actorname>
+<releaseyear> 2018 </releaseyear>
+</movie>
+</movieinfo>
+
+
+movie.php
+
+
+<?php
+$dom=new DOMDocument();
+$dom->load("movie.xml");
+echo"<b>actor name</b>";
+echo"<br>";
+$t=$dom->getElementsByTagName("actorname");
+foreach($t as $a)
+{
+print $a->textContent;
+echo"<br>";
+}
+echo"<b>movie name</b>";
+echo"<br>";
+$t=$dom->getElementsByTagName("movietitle");
+foreach($t as $a)
+{
+print $a->textContent;
+echo"<br>";
+}
+?>
+
+
+python
+
+
+
+import pandas as pd
+import numpy as np
+from apyori import apriori
+#loading market basket dataset..
+df = pd.read_csv('Market_Basket_Optimisation.csv',header = None)
+print(df.head())
+#replacing empty value with 0.
+df.fillna(0,inplace=True)
+print(df.head())
+print(df.describe())
+print(df.shape)
+#Getting the list of transactions from the dataset
+transactions = []
+for i in range(0, 7500):
+transactions.append([str(df.values[i,j]) for j in range(0, 20)])
+#Training Apriori algorithm on the dataset
+rules=apriori(transactions, min_support = 0.003, min_confidence = 0.3, min_lift = 3,
+min_length = 2)
+#Visualizing the list of rules
+results = list(rules)
+for i in results:
+print('\n')
+print(i)
+print('**********')
+Slip No.8

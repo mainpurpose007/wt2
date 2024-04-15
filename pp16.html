@@ -1,0 +1,122 @@
+book.html
+<html>
+<head>
+<script type="text/javascript" >
+function print(str)
+{
+var ob=false;
+ob=new XMLHttpRequest();
+ob.open("GET","book.php?q="+str);//emailid="+eid);
+ob.send();
+ob.onreadystatechange=function()
+{
+if(ob.readyState==4 && ob.status==200)
+{
+document.getElementById("i").innerHTML=ob.responseText;
+}
+}
+}
+</script>
+</head>
+<body>
+<form>
+List of book titles:
+<select name="Book_Title" onChange="print(this.value)">
+<option value="Networking"> Networking</option>
+<option value="php"> PHP</option>
+<option value="java">JAVA</option>
+</select>
+</form>
+<div id="i">Book details will be given here</div>
+</body>
+</html>
+
+book.xml
+
+<Bookinfo>
+<Book>
+<Book_Title>Networking</Book_Title>
+<Book_Author>400</Book_Author>
+<Book_PubYear>2015</Book_PubYear>
+<Book_Price>450</Book_Price>
+</Book>
+<Book>
+<Book_Title>php</Book_Title>
+<Book_Author>400</Book_Author>
+<Book_PubYear>2015</Book_PubYear>
+<Book_Price>450</Book_Price>
+</Book>
+<Book>
+<Book_Title>java</Book_Title>
+<Book_Author>400</Book_Author>
+<Book_PubYear>2015</Book_PubYear>
+<Book_Price>450</Book_Price>
+</Book>
+</Bookinfo>
+
+book.php
+
+<?php
+$q=$_GET['q'];
+$dom=new DOMDocument();
+$dom->load("book.xml");
+echo"<b>Book name</b>";
+echo"<br>";
+$x=$dom->getElementsByTagName("Book_Title");
+for($i=0;$i<=$x->length-1;$i++)
+{
+if($x->item($i)->nodeType==1)
+{
+if($x->item($i)->childNodes->item(0)->nodeValue==$q)
+{
+$y=($x->item($i)->parentNode);
+}
+}
+}
+$book=($y->childNodes);
+for($i=0;$i<$book->length;$i++)
+{
+if($book->item($i)->nodeType==1)
+{
+echo($book->item($i)->nodeName);
+echo(":");
+echo($book->item($i)->childNodes->item(0)->nodeValue);
+echo("<br>");
+}
+}
+?>
+
+python
+
+import re
+from nltk.tokenize import sent_tokenize, word_tokenize
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+text = """
+Natural language processing (NLP) is a subfield of linguistics, computer science, information engineering, and artificial intelligence concerned with the interactions between computers and human (natural) languages, in particular how to program computers to process and analyze large amounts of natural language data.
+The goal is a computer capable of "understanding" the contents of documents, including the contextual nuances of the language within them.
+The technology can then accurately extract information and insights contained in the documents as well as categorize and organize the documents themselves.
+Challenges in natural language processing frequently involve speech recognition, natural language understanding, and natural language generation.
+"""
+
+# Preprocess the text
+text = re.sub(r'[^a-zA-Z\s]', '', text)
+sentences = sent_tokenize(text)
+word_tokens = [word_tokenize(sentence.lower()) for sentence in sentences]
+
+# TF-IDF Vectorization
+tfidf_vectorizer = TfidfVectorizer()
+tfidf_matrix = tfidf_vectorizer.fit_transform([' '.join(tokens) for tokens in word_tokens])
+
+# Cosine Similarity
+sentence_similarity = cosine_similarity(tfidf_matrix, tfidf_matrix)
+
+# Generate summary
+summary_length = min(3, len(sentences))
+sentence_scores = [(sentence_similarity[i].sum(), sentence) for i, sentence in enumerate(sentences)]
+sentence_scores.sort(reverse=True)
+summary = ' '.join([sentence for score, sentence in sentence_scores[:summary_length]])
+
+print("Original text:\n", text)
+print("\nSummary:\n", summary)

@@ -1,0 +1,74 @@
+teacher.html
+
+<html>
+<script type="text/javascript">
+function display()
+{
+ob = new XMLHttpRequest();
+ob.open("GET","teacher.php");
+ob.send();
+ob.onreadystatechange = function()
+{
+if(ob.readyState == 4 && ob.status == 200)
+document.getElementById("i").innerHTML = ob.responseText;
+}
+}
+</script>
+<body>
+<h2>DISPLAY INFORMATION OF TEACHER</h2>
+<input type=submit value="DISPLAY INFORMATION" onclick=display()>
+<span id=i></span>
+</body>
+</html>
+
+teacher.php
+
+<?php
+$con_string="host=localhost dbname=madhuri port=5432 user=postgres password=1234";
+$con = pg_connect($con_string);
+$q = "select * from teacher;";
+$rs = pg_query($con,$q) or die("Cannot Execute query");
+echo"<table border=1>";
+echo"<tr><th>Teacher No</th><th>Teacher
+Name</th><th>Qualification</th><th>Salary</th></tr>";
+while($row = pg_fetch_array($rs))
+{
+echo"<tr><td>".$row['tno']."</td>";
+echo"<td>".$row['tname']."</td>";
+echo"<td>".$row['qualification']."</td>";
+echo"<td>".$row['salary']."</td></tr>";
+}
+echo"</table>";
+?>
+
+python
+
+import pandas as pd
+from mlxtend.frequent_patterns import apriori, association_rules
+
+# Create the dataset
+data = {
+    'TID': [1, 2, 3, 4],
+    'Items': [
+        {'Apple', 'Mango', 'Banana'},
+        {'Mango', 'Banana', 'Cabbage', 'Carrots'},
+        {'Mango', 'Banana', 'Carrots'},
+        {'Mango', 'Carrots'}
+    ]
+}
+
+# Convert to DataFrame
+df = pd.DataFrame(data)
+
+# Convert categorical values into numeric format using one-hot encoding
+df_encoded = pd.get_dummies(df['Items'].apply(pd.Series).stack()).sum(level=0)
+
+# Apply Apriori algorithm to generate frequent itemsets and association rules with different min_sup values
+for min_sup in [0.25, 0.5, 0.75]:
+    frequent_itemsets = apriori(df_encoded, min_support=min_sup, use_colnames=True)
+    print(f"\nFrequent Itemsets with min_sup={min_sup}:")
+    print(frequent_itemsets)
+    
+    association_rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.5)
+    print("\nAssociation Rules:")
+    print(association_rules)

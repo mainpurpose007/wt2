@@ -1,0 +1,73 @@
+<html>
+<body>
+<form action="<?php echo $_SERVER['PHP_SELF']?>" method=POST>
+Enter Number :<input type=text name=n><br>
+<input type=radio name=ch value=1>Fibonacci Series.<br>
+<input type=radio name=ch value=2>Sum of the digits of a number.<br>
+<input type=submit name=submit value=submit><br>
+</form>
+<?php
+if(isset($_POST['submit']))
+{
+$n=$_POST['n'];
+$ch=$_POST['ch'];
+switch($ch)
+{
+case 1:
+$f1 = 0;
+$f2 = 1;
+echo"Fibonacci series is:<br>";
+for($i=1;$i<=$n;$i++)
+{
+echo $f1."<br>";
+$f3 = $f1 + $f2;
+$f1 = $f2;
+$f2 = $f3;
+}
+break;
+case 2:
+$sum=0;
+$rem;
+while($n!=0)
+{
+$rem=$n%10;
+$sum=$sum+$rem;
+$n=$n/10;
+}
+echo "Sum of digits is = $sum";
+break;
+}
+}
+?></body></html>
+
+
+
+python
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# Load your student score dataset (replace 'student_scores.csv' with the actual filename)
+student_data = pd.read_csv('student_scores.csv')
+
+# Assuming your dataset has columns like 'hours_studied' and 'result' (pass/fail)
+# Select your independent variable (X) and target variable (y)
+X = student_data[['hours_studied']]  # Independent variable
+y = student_data['result']           # Target variable
+
+# Split the dataset into training and testing sets (80% training, 20% testing)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create and fit the logistic regression model
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Make predictions on the testing set
+y_pred = model.predict(X_test)
+
+# Calculate accuracy to evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+

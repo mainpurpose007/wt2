@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Voter Registration</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+  <h2>Voter Registration Form</h2>
+
+  <form id="registrationForm" action="validate_voter.php" method="post">
+    <label for="name">Name (uppercase only):</label><br>
+    <input type="text" id="name" name="name" pattern="[A-Z\s]+" required><br><br>
+
+    <label for="age">Age (>= 18):</label><br>
+    <input type="number" id="age" name="age" min="18" required><br><br>
+
+    <label for="nationality">Nationality (Indian only):</label><br>
+    <input type="text" id="nationality" name="nationality" value="Indian" readonly><br><br>
+
+    <input type="submit" value="Submit">
+  </form>
+
+  <div id="validationResult"></div>
+
+  <script>
+    $(document).ready(function() {
+      $('#registrationForm').submit(function(event) {
+        event.preventDefault(); // Prevent form submission
+
+        // Send form data using AJAX
+        $.ajax({
+          type: 'POST',
+          url: $(this).attr('action'),
+          data: $(this).serialize(),
+          success: function(response) {
+            $('#validationResult').html(response); // Display validation result
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
+
+
+
+
+php
+
+
+<?php
+$name = strtoupper($_POST['name']);
+$age = $_POST['age'];
+$nationality = $_POST['nationality'];
+
+if (!preg_match('/^[A-Z\s]+$/', $name)) {
+  echo "<p style='color:red'>Name should be in uppercase letters only.</p>";
+} elseif ($age < 18) {
+  echo "<p style='color:red'>Age should be 18 years or older.</p>";
+} elseif ($nationality !== 'Indian') {
+  echo "<p style='color:red'>Nationality should be Indian only.</p>";
+} else {
+  echo "<p style='color:green'>Validation successful. Voter registered!</p>";
+}
+?>
+
+
+python
+
